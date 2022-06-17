@@ -38,6 +38,7 @@ import org.jetbrains.kotlin.idea.stubindex.KotlinTypeAliasShortNameIndex
 import org.jetbrains.kotlin.idea.util.withResolvedCall
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.resolve.ImportPath
@@ -127,6 +128,12 @@ class KotlinSearchUsagesSupportFirImpl(private val project: Project) : KotlinSea
                         else ->
                             null
                     }
+                }
+            }
+            is PsiMethod -> {
+                ReceiverTypeSearcherInfo(psiElement.containingClass) {
+                    // TODO: Implement containsTypeOrDerivedInside callback that should determine whether the given KtDeclaration instance contains psiClass or its derived class or not
+                    true
                 }
             }
             is PsiMember ->
